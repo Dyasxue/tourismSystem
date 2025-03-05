@@ -5,7 +5,7 @@
 #define ERROR -1
 
 /*
- * 斐波那契堆实现（用于Dijkstra算法优化）
+ * 斐波那契堆（用于Dijkstra算法优化）
  * 包含节点合并、级联剪切等特性，支持快速插入、提取最小值和减少键值操作
  */
 class FibHeap {
