@@ -1,0 +1,166 @@
+body{
+    position: relative;
+    margin: 0px;
+    background-image: url(../images/scene-bg-x.6a1a9834.png);
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-clip: border-box;
+    background-origin: padding-box;
+}
+.title{
+    padding-top: 100px;
+}
+.enh{
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    text-align: center;
+    font-weight:  400px;
+    font-size: 100px;            
+    background-clip: border-box;
+    background-image:-webkit-linear-gradient(bottom,#c756ff,#ff92d3,#2bcdff); 
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+    opacity: 60%;
+    cursor: default;
+}
+.cnh{
+    text-align: center;
+    font-size: 100px;            
+    background-clip: border-box;
+    background-image:-webkit-linear-gradient(top,#c756ff,#ff92d3,#2bcdff);
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+    opacity: 60%;
+    font-family: 华文彩云;
+    cursor: default;
+}
+.bdiv{
+    margin: 200px auto 0;
+    width: 200px;
+    height: 70px;
+}
+.button {
+    display: inline-block;
+    border-radius: 10px;
+    background-color: rgb(77, 171, 253);
+    border: none;
+    box-shadow: 2px 2px 2px rgb(81, 182, 213);
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: center;
+    width: 200px;
+    height: 70px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: auto;
+    opacity: 90%; 
+  }
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  .button span:after {
+    content: '»';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  .button:hover{
+      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+      background-color: #357fc9;
+  }
+  .button:hover span {
+    padding-right: 25px;
+  }
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+.test{
+    position: absolute;
+    width: 350px;
+    height: 280px;
+    margin-top: -20px;
+}
+.function{
+  position: absolute;
+    left: 0;
+    right: 0;
+    height: 114px;
+    margin: 50px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+.item_wrap{
+  width: 140px;
+  justify-content: center;
+  border-right:1px solid white;
+  color: #000;
+  font-size: 20px;
+  margin-left:40px;
+}
+.item_hover{
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+  padding-bottom: 10px;
+  font-size: 20px;
+}
+.item_wrap:hover .item_hover{
+  color: rgb(53, 127, 201);
+  border-bottom: 2px solid #357fc9;
+}
+/* 模态窗口样式 */
+.modal {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+/* 模态窗口内容样式 */
+.modal-content {
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    border-radius: 10px;
+    width: 600px;
+    height: 600px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.modal-content p{
+  background-clip: border-box;
+  background-image:-webkit-linear-gradient(top,red,orange,rgb(0, 149, 255));
+  -webkit-background-clip:text; 
+  -webkit-text-fill-color:transparent;
+}
+/* 关闭按钮样式 */
+#close-modal {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  line-height: 20px;
+}
+#close-modal:hover{
+  background-color: red;
+  color: #fff;
+}
+
+/* 模糊效果 */
+.blur {
+    filter: blur(5px); /* 模糊原界面 */
+}
