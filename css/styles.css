@@ -130,19 +130,17 @@ body{
 }
 /* 模态窗口内容样式 */
 .modal-content {
-    background: linear-gradient(135deg, #ffffff, #e0e0e0);
     border-radius: 10px;
     width: 600px;
     height: 600px;
     text-align: center;
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow-y: scroll;
+    background-color: #f9f9f9;
 }
 .modal-content p{
   background-clip: border-box;
-  background-image:-webkit-linear-gradient(top,red,orange,rgb(0, 149, 255));
-  -webkit-background-clip:text; 
-  -webkit-text-fill-color:transparent;
 }
 /* 关闭按钮样式 */
 #close-modal {
@@ -154,6 +152,7 @@ body{
   right: 10px;
   cursor: pointer;
   line-height: 20px;
+  text-align: center;
 }
 #close-modal:hover{
   background-color: red;
@@ -164,3 +163,99 @@ body{
 .blur {
     filter: blur(5px); /* 模糊原界面 */
 }
+
+/* 自定义滚动条的整体样式 */
+::-webkit-scrollbar {
+  width: 8px; /* 滚动条的宽度 */
+  height: 8px; /* 滚动条的高度（水平滚动条） */
+}
+
+/* 滚动条的轨道 */
+::-webkit-scrollbar-track {
+  border-radius: 6px; /* 轨道的圆角 */
+  opacity: 0%;
+}
+
+/* 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background: rgba(85, 85, 85,.4); /* 滑块的背景色 */
+  border-radius: 6px; /* 滑块的圆角 */
+}
+
+/* 滚动条滑块在悬停时的样式 */
+::-webkit-scrollbar-thumb:hover {
+  background: #888; /* 滑块悬停时的背景色 */
+}
+
+  /* 标题 */
+  .feedback-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* 输入框容器 */
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  /* 输入框标签 */
+  .input-group label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+
+  /* 输入框 */
+  .input-group input,
+  .input-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  /* 多行文本框 */
+  .input-group textarea {
+    height: 200px;
+    resize: vertical; /* 允许垂直调整大小 */
+  }
+
+  /* 提交按钮 */
+  .submit-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+
+  /* 固定在右下角的帮助标签 */
+  .help-tag {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 12px;
+    background-color: #ffcc00;
+    color: #333;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .help-tag:hover {
+    background-color: #e6b800;
+  }
