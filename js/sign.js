@@ -75,6 +75,7 @@
             if (document.getElementById('agreeCheckbox').checked) {
                 alert(`登录成功！用户名: ${username}, 密码: ${password}`);
                 signmodal.style.display = 'none';
+                window.location.href = 'main.html';
             } else {
                 alert("请先同意用户协议！");
             }
