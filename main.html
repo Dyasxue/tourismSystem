@@ -12,7 +12,7 @@
         <!-- 导航栏 -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">旅游助手</a>
+                <a class="navbar-brand" href="./main.html">你的旅游</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -26,6 +26,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="route-tab">路线规划</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="facility-tab">设施查询</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="animation-tab">生成动画</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="food-tab">美食推荐</a>
                         </li>
                     </ul>
                     <div class="d-flex">
@@ -107,10 +116,19 @@
                                     <textarea class="form-control" id="diary-content-input" rows="5" required></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="diary-spot" class="form-label">关联景点</label>
-                                    <select class="form-select" id="diary-spot">
-                                        <option value="">不关联景点</option>
-                                    </select>
+                                    <label for="diary-spot" class="form-label">关联景点 <span class="text-danger">*</span></label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="diary-spot-input" placeholder="输入景点名称">
+                                        <button class="btn btn-primary" type="button" id="search-diary-spot-btn">搜索</button>
+                                    </div>
+                                    <div id="diary-spot-results" class="list-group mb-3" style="display: none;"></div>
+                                    <input type="hidden" id="diary-spot-id" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">添加附件（最多2个，图片或视频）</label>
+                                    <input type="file" class="form-control" id="diary-attachments" multiple accept="image/*,video/*">
+                                    <small class="text-muted">可选择1-2个文件，支持图片(jpg, png)和视频(mp4)</small>
+                                    <div id="attachments-preview" class="mt-2"></div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">保存日记</button>
                             </form>
@@ -127,6 +145,113 @@
                     </div>
                 </div>
 
+                <!-- 在主内容区添加美食推荐内容 -->
+                <div id="food-content" style="display: none;">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5>美食搜索</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="food-search-input" placeholder="输入美食名称">
+                                <button class="btn btn-primary" id="food-search-btn">搜索</button>
+                            </div>
+                            <div id="food-search-results" class="list-group"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>推荐美食</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recommended-foods" class="row"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 动画生成内容 -->
+                <div id="animation-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>生成动画</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="animation-form">
+                                <div class="mb-3">
+                                    <label for="animation-prompt" class="form-label">动画描述</label>
+                                    <textarea class="form-control" id="animation-prompt" rows="3" placeholder="描述你想要生成的动画场景..." required></textarea>
+                                    <small class="text-muted">请详细描述动画场景，描述越详细效果越好</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="animation-upload" class="form-label">上传参考图片（可选）</label>
+                                    <div id="animation-upload-area" class="border rounded p-4 text-center bg-light">
+                                        <div id="upload-prompt">
+                                            <i class="bi bi-cloud-arrow-up fs-1"></i>
+                                            <p class="mt-2">点击或拖拽图片到此处</p>
+                                            <small class="text-muted">支持JPG/PNG格式，最大2MB</small>
+                                        </div>
+                                        <div id="upload-preview" style="display: none;">
+                                            
+                                            <button type="button" class="btn btn-sm btn-danger mt-2" id="remove-image-btn">移除图片</button>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="animation-upload" accept="image/*" style="display: none;">
+                                    <a href="" id="generated-video">动画链接</a>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary" id="generate-btn">生成动画</button>
+                            </form>
+                            
+                            <div id="animation-result" class="mt-4" style="display: none;">
+                                <h5>生成结果</h5>
+                                <div id="animation-preview" class="text-center">
+                                    <video id="generated-animation" controls class="img-fluid rounded" style="max-height: 400px;"></video>
+                                    <div class="mt-2">
+                                        <a id="download-btn" class="btn btn-success" download="animation.mp4">下载动画</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 设施查询内容 -->
+                <div id="facility-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>设施查询</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="facility-type" class="form-label">设施类型</label>
+                                        <select class="form-select" id="facility-type">
+                                            <option value="all">全部</option>
+                                            <option value="餐厅">餐厅</option>
+                                            <option value="卫生间">卫生间</option>
+                                            <option value="停车场">停车场</option>
+                                            <option value="酒店">酒店</option>
+                                            <option value="急救站">急救站</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="facility-location" class="form-label">位置</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="facility-location" placeholder="输入位置或景区名称">
+                                    <button class="btn btn-primary" type="button" id="search-facility-btn">查询</button>
+                                </div>
+                            </div>
+                            <div id="facility-results" class="list-group" style="display: none;"></div>
+                            <div id="facility-map-container" style="height: 400px; margin-top: 20px; display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 路线规划内容 -->
                 <div id="route-content" style="display: none;">
                     <div class="card">
@@ -135,33 +260,56 @@
                         </div>
                         <div class="card-body">
                             <form id="route-form">
-                                <div class="row mb-3">
+                                <div class="mb-3">
+                                    <label for="scenic-spot" class="form-label" id="in_spot">所在景区</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="scenic-spot" placeholder="输入景区名称">
+                                        <button class="btn btn-primary" type="button" id="search-scenic-btn">搜索</button>
+                                    </div>
+                                    <div id="scenic-results" class="list-group mb-3" style="display: none;"></div>
+                                </div>
+                                <div class="row mb-3" id="route-inputs" style="display: none;">
                                     <div class="col-md-6">
                                         <label for="start-point" class="form-label">起点</label>
-                                        <input type="text" class="form-control" id="start-point" placeholder="输入起点位置" required>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="start-point" placeholder="输入起点位置">
+                                            <button class="btn btn-primary" type="button" id="search-start-btn">搜索</button>
+                                        </div>
+                                        <div id="start-results" class="list-group mb-3" style="display: none;"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="end-point" class="form-label">终点</label>
-                                        <input type="text" class="form-control" id="end-point" placeholder="输入终点位置" required>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="end-point" placeholder="输入终点位置">
+                                            <button class="btn btn-primary" type="button" id="search-end-btn">搜索</button>
+                                        </div>
+                                        <div id="end-results" class="list-group mb-3" style="display: none;"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="travel-mode" class="form-label">出行方式</label>
+                                <div class="mb-3" id="travel-mode-container" style="display: none;">
+                                    <label for="travel-mode" class="form-label">骑车</label>
                                     <select class="form-select" id="travel-mode">
-                                        <option value="0">驾车</option>
-                                        <option value="1">公交</option>
-                                        <option value="2">步行</option>
-                                        <option value="3">骑行</option>
+                                        <option value="0">否</option>
+                                        <option value="1">是</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">规划路线</button>
+                                <div class="mb-3" id="waypoints-container" style="display: none;">
+                                    <label class="form-label">途径点（最多5个）</label>
+                                    <div id="waypoints-list"></div>
+                                    <div class="input-group mt-2">
+                                        <input type="text" class="form-control" id="waypoint-input" placeholder="输入途径点位置">
+                                        <button class="btn btn-primary" type="button" id="add-waypoint-btn">添加</button>
+                                    </div>
+                                    <div id="waypoint-results" class="list-group mt-2" style="display: none;"></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="route-submit-btn" style="display: none;">规划路线</button>
                             </form>
                             <div id="map-container" class="mt-3" style="height: 400px;"></div>
                             <div id="route-info" class="mt-3"></div>
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
 
             <!-- 右侧边栏 -->
             <div class="col-md-3">
@@ -171,11 +319,15 @@
                     </div>
                     <div class="card-body">
                         <div class="text-center mb-3">
-                            <img src="https://via.placeholder.com/100" class="rounded-circle" alt="用户头像" id="user-avatar">
+                            <img src="./images/御用头像.jpg" class="rounded-circle" alt="用户头像" id="user-avatar">
+                            <div class="mt-2">
+                                <input type="file" id="avatar-upload" accept=".jpg,.jpeg" style="display: none;">
+                                <button class="btn btn-sm btn-primary" id="change-avatar-btn">更换头像</button>
+                            </div>
                         </div>
                         <div class="text-center">
-                            <h5 id="user-fullname">用户名</h5>
-                            <p class="text-muted" id="user-bio">暂无个人简介</p>
+                            <h5 id="user-fullname">街口施法老太婆</h5>
+                            <p class="text-muted" id="user-bio">为有牺牲多壮志，敢叫日月换新天</p>
                         </div>
                     </div>
                 </div>
@@ -185,7 +337,9 @@
                         <h5>推荐用户</h5>
                     </div>
                     <div class="card-body">
-                        <div id="recommended-users" class="list-group"></div>
+                        <div id="recommended-users" class="list-group">
+                            <!-- 用户列表将通过JavaScript动态加载 -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -206,21 +360,62 @@
                             <img src="" class="img-fluid rounded" id="spot-modal-image" alt="景点图片">
                         </div>
                         <div class="col-md-6">
-                            <p id="spot-modal-description"></p>
                             <p><strong>地址:</strong> <span id="spot-modal-address"></span></p>
+                            <p><strong>描述:</strong> <span id="spot-modal-description"></span></p>
                             <p><strong>开放时间:</strong> <span id="spot-modal-opening-hours"></span></p>
                             <p><strong>门票:</strong> <span id="spot-modal-ticket"></span></p>
                             <p><strong>评分:</strong> <span id="spot-modal-rating"></span></p>
                         </div>
                     </div>
-                    <div class="mt-3">
-                        <h6>相关日记</h6>
-                        <div id="spot-related-diaries"></div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        <div class="rating-container">
+                            <span class="rating-star" data-value="1">☆</span>
+                            <span class="rating-star" data-value="2">☆</span>
+                            <span class="rating-star" data-value="3">☆</span>
+                            <span class="rating-star" data-value="4">☆</span>
+                            <span class="rating-star" data-value="5">☆</span>
+                            <span id="rating-text" class="ms-2">请评分</span>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加美食详情模态框 -->
+    <div class="modal fade" id="food-detail-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="food-modal-title">美食详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="" alt="" id="food-modal-image">
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>菜系:</strong> <span id="food-modal-cuisine"></span></p>
+                            <p><strong>饭店:</strong> <span id="food-modal-restaurant"></span></p>
+                            <p><strong>价格:</strong> <span id="food-modal-price"></span></p>
+                            <p><strong>描述:</strong> <span id="food-modal-description"></span></p>
+                            <p><strong>热度:</strong> <span id="food-modal-popularity"></span></p>
+                            <p><strong>评分:</strong> <span id="food-modal-rating"></span></p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="add-to-favorites-btn">收藏</button>
+                    <div class="rating-container">
+                        <span class="food-rating-star" data-value="1">☆</span>
+                        <span class="food-rating-star" data-value="2">☆</span>
+                        <span class="food-rating-star" data-value="3">☆</span>
+                        <span class="food-rating-star" data-value="4">☆</span>
+                        <span class="food-rating-star" data-value="5">☆</span>
+                        <span id="food-rating-text" class="ms-2">请评分</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,6 +427,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="diary-modal-title">日记详情</h5>
+                    <div class="ms-3 input-group" style="width: 300px;">
+                        <input type="text" class="form-control" id="diary-search-input-1" placeholder="搜索日记内容">
+                        <button class="btn btn-outline-secondary" type="button" id="diary-search-btn-1">搜索</button>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -241,21 +440,29 @@
                     </div>
                     <div id="diary-modal-content"></div>
                     <div class="mt-3" id="diary-modal-images"></div>
-                    <div class="mt-3">
-                        <h6>相关景点</h6>
-                        <div id="diary-related-spots"></div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="like-diary-btn">点赞</button>
+                    <!-- 新增评分组件 -->
+                    <div class="rating-containers">
+                        <span class="rating-stars" data-value="1">☆</span>
+                        <span class="rating-stars" data-value="2">☆</span>
+                        <span class="rating-stars" data-value="3">☆</span>
+                        <span class="rating-stars" data-value="4">☆</span>
+                        <span class="rating-stars" data-value="5">☆</span>
+                        <span id="diary-rating-text" class="ms-2">请评分</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+        </div>
+    </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://webapi.amap.com/maps?v=2.0&key=d761cd0127e933ee05775ad7b203f5a2"></script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=0c1a13bffd0ab58897de7a29fab13970"></script>
     <script src="./js/map.js"></script>
 </body>
 </html>

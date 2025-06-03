@@ -60,7 +60,7 @@ body {
     background-color: #f8f9fa;
 }
 
-.user-avatar {
+#user-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -69,4 +69,318 @@ body {
 
 .rating {
     color: #ffc107;
+}
+
+/* 在文档3的末尾添加以下样式 */
+/* 用户主页样式 */
+#profile-avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-diary-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s;
+}
+
+.user-diary-item:hover {
+    background-color: #f8f9fa;
+}
+
+.user-diary-item h5 {
+    margin-bottom: 5px;
+}
+
+.user-diary-item small {
+    color: #6c757d;
+}
+
+.user-diary-item p {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+
+/* 添加附件预览样式 */
+#attachments-preview img,
+#attachments-preview video {
+    max-width: 100%;
+    margin-right: 10px;
+}
+
+/* 头像上传按钮样式 */
+#change-avatar-btn {
+    width: 100%;
+    max-width: 150px;
+}
+
+/* 文件上传控件样式 */
+#diary-attachments {
+    padding: 0.375rem 0.75rem;
+}
+
+/* 评分系统样式 */
+.rating-container {
+    display: flex;
+    align-items: center;
+}
+
+.rating-star {
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.rating-star:hover,
+.rating-star.active {
+    color: #ffc107;
+}
+
+#rating-text {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+#scenic-results {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#scenic-results .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#scenic-results .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+#scenic-results h5 {
+    margin-bottom: 0.5rem;
+}
+
+#scenic-results .badge {
+    font-size: 0.8rem;
+}
+
+/* 设施查询样式 */
+#facility-results {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#facility-results .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#facility-results .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+#facility-results h5 {
+    margin-bottom: 0.5rem;
+}
+
+#facility-results .badge {
+    font-size: 0.8rem;
+}
+
+#facility-map-container {
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* 在文档1的CSS中添加高亮样式 */
+mark {
+    background-color: #ffeb3b;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* 途径点样式 */
+#waypoints-list {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.waypoint-item {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s;
+}
+
+.waypoint-item:hover {
+    background-color: #e9ecef;
+}
+
+.remove-waypoint {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.7rem;
+}
+
+#waypoint-results {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#waypoint-results .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#waypoint-results .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+
+/* 预览图样式 */
+#preview-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* 确保日记模态框中的评分组件样式与景点一致 */
+#diary-detail-modal .rating-containers {
+    display: flex;
+    align-items: center;
+}
+
+#diary-detail-modal .rating-stars {
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+#diary-detail-modal .rating-stars:hover,
+#diary-detail-modal .rating-stars.active {
+    color: #ffc107;
+}
+
+#diary-detail-modal #diary-rating-text {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* 添加动画生成相关样式 */
+#animation-upload-area {
+    transition: all 0.3s ease;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#animation-upload-area:hover {
+    border-color: #0d6efd !important;
+    background-color: rgba(13, 110, 253, 0.05) !important;
+}
+
+#upload-prompt i {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#preview-image {
+    max-height: 200px;
+    object-fit: contain;
+}
+
+#animation-preview {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.generating-animation {
+    position: relative;
+}
+
+.generating-animation::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#generated-animation {
+    background-color: #000;
+    border-radius: 0.25rem;
+}
+
+/* 美食卡片样式 */
+.food-card {
+    cursor: pointer;
+    transition: transform 0.3s;
+    height: 100%;
+}
+
+.food-card:hover {
+    transform: translateY(-5px);
+}
+
+.food-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* 美食搜索结果样式 */
+#food-search-results {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#food-search-results .list-group-item {
+    transition: background-color 0.2s;
+}
+
+#food-search-results .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 美食评分星星样式 */
+.food-rating-star {
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.food-rating-star:hover,
+.food-rating-star.active {
+    color: #ffc107;
+}
+
+#food-rating-text {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+#food-modal-image {
+    height: 150px;
+    object-fit: cover;
+}
+
+.highlight {
+    background-color: yellow;
+    padding: 0 2px;
+    border-radius: 2px;
 }

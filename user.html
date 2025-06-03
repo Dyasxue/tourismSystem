@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户主页 - 旅游助手</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/map.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./main.html">旅游助手</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./main.html">首页</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <span class="navbar-text me-3">欢迎, <span id="username-display">用户</span></span>
+                        <button class="btn btn-outline-light" id="logout-btn">退出</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 用户主页内容 -->
+        <div class="row mt-4">
+            <!-- 左侧用户信息 -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img id="profile-avatar" src="./images/御用头像.jpg" class="rounded-circle mb-3" width="150" height="150" alt="用户头像">
+                        <h3 id="profile-username">用户名</h3>
+                        <p id="profile-bio" class="text-muted">个性签名</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户日记 -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>用户日记</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="user-diaries" class="list-group">
+                            <!-- 日记列表将在这里动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 日记详情模态框 -->
+    <div class="modal fade" id="diary-detail-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="diary-modal-title">日记详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <small class="text-muted" id="diary-modal-author"></small>
+                        <small class="text-muted ms-2" id="diary-modal-date"></small>
+                    </div>
+                    <div id="diary-modal-content"></div>
+                    <div class="mt-3" id="diary-modal-images"></div>
+                    <div class="mt-3">
+                        <h6>相关景点</h6>
+                        <div id="diary-related-spots"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="like-diary-btn">点赞</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 景点详情模态框 -->
+    <div class="modal fade" id="spot-detail-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="spot-modal-title">景点详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="" class="img-fluid rounded" id="spot-modal-image" alt="景点图片">
+                        </div>
+                        <div class="col-md-6">
+                            <p id="spot-modal-description"></p>
+                            <p><strong>地址:</strong> <span id="spot-modal-address"></span></p>
+                            <p><strong>开放时间:</strong> <span id="spot-modal-opening-hours"></span></p>
+                            <p><strong>门票:</strong> <span id="spot-modal-ticket"></span></p>
+                            <p><strong>评分:</strong> <span id="spot-modal-rating"></span></p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h6>相关日记</h6>
+                        <div id="spot-related-diaries"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="add-to-favorites-btn">收藏</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function showDiaryDetail(diaryId) {
+        // 这里应该是从后端API获取数据
+        // 模拟数据
+        const diary = {
+            id: diaryId,
+            title: '故宫一日游',
+            author: '张三',
+            date: '2023-05-15',
+            content: '今天去了故宫，人真的好多啊，但是建筑真的太壮观了。早上8点就到达了天安门广场，排队的人已经很多了。进入故宫后，首先参观了太和殿，金碧辉煌的宫殿让人震撼。中午在故宫餐厅吃了饭，价格有点贵但味道还不错。下午参观了珍宝馆，看到了很多珍贵的文物。一天下来虽然很累，但是非常值得。',
+            likes: 24,
+            images: [
+                './images/天坛.jpg',
+                './images/长城.jpg'
+            ],
+            relatedSpots: [1]
+        };
+        
+        // 填充模态框内容
+        document.getElementById('diary-modal-title').textContent = diary.title;
+        document.getElementById('diary-modal-author').textContent = `作者: ${diary.author}`;
+        document.getElementById('diary-modal-date').textContent = `日期: ${diary.date}`;
+        document.getElementById('diary-modal-content').innerHTML = `<p>${diary.content.replace(/\n/g, '</p><p>')}</p>`;
+        
+        // 加载图片
+        const imagesContainer = document.getElementById('diary-modal-images');
+        imagesContainer.innerHTML = '';
+        if (diary.images && diary.images.length > 0) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            diary.images.forEach(image => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-3';
+                col.innerHTML = `<img src="${image}" class="img-fluid rounded" alt="日记图片">`;
+                row.appendChild(col);
+            });
+            imagesContainer.appendChild(row);
+        }
+        
+        // 加载相关景点
+        loadRelatedSpots(diary.relatedSpots, 'diary-related-spots');
+        
+        // 显示模态框
+        const modal = new bootstrap.Modal(document.getElementById('diary-detail-modal'));
+        modal.show();
+    }
+
+    function loadRelatedDiaries(spotId, containerId) {
+        // 这里应该是从后端API获取数据
+        // 模拟数据
+        const diaries = [
+            { id: 1, title: '故宫一日游', author: '张三', date: '2023-05-15', excerpt: '今天去了故宫，人真的好多啊...' },
+            { id: 6, title: '故宫摄影记', author: '钱七', date: '2023-04-05', excerpt: '在故宫拍了很多漂亮的照片...' }
+        ];
+        
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        if (diaries.length === 0) {
+            container.innerHTML = '<p>暂无相关日记</p>';
+            return;
+        }
+        
+        diaries.forEach(diary => {
+            const diaryElement = document.createElement('div');
+            diaryElement.className = 'mb-2';
+            diaryElement.innerHTML = `
+                <h6><a href="#" class="text-decoration-none diary-link" data-id="${diary.id}">${diary.title}</a></h6>
+                <small class="text-muted">作者: ${diary.author} | 日期: ${diary.date}</small>
+                <p class="mb-0">${diary.excerpt}</p>
+            `;
+            container.appendChild(diaryElement);
+            
+            // 添加点击事件
+            diaryElement.querySelector('.diary-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showDiaryDetail(diary.id);
+            });
+        });
+    }
+
+
+function showSpotDetail(spotId) {
+        // 这里应该是从后端API获取数据
+        // 模拟数据
+        const spot = {
+            id: spotId,
+            name: '故宫',
+            image: './images/故宫.jpg',
+            description: '北京故宫是中国明清两代的皇家宫殿，旧称紫禁城，位于北京中轴线的中心，是中国古代宫廷建筑之精华。北京故宫以三大殿为中心，占地面积72万平方米，建筑面积约15万平方米，有大小宫殿七十多座，房屋九千余间。是世界上现存规模最大、保存最为完整的木质结构古建筑之一。',
+            address: '北京市东城区景山前街4号',
+            openingHours: '08:30-17:00 (4月1日-10月31日), 08:30-16:30 (11月1日-3月31日)',
+            ticket: '旺季60元, 淡季40元',
+            rating: 4.8
+        };
+        
+        // 填充模态框内容
+        document.getElementById('spot-modal-title').textContent = spot.name;
+        document.getElementById('spot-modal-image').src = spot.image;
+        document.getElementById('spot-modal-description').textContent = spot.description;
+        document.getElementById('spot-modal-address').textContent = spot.address;
+        document.getElementById('spot-modal-opening-hours').textContent = spot.openingHours;
+        document.getElementById('spot-modal-ticket').textContent = spot.ticket;
+        document.getElementById('spot-modal-rating').innerHTML = `${'★'.repeat(Math.floor(spot.rating))}${'☆'.repeat(5-Math.floor(spot.rating))} ${spot.rating}`;
+        
+        // 加载相关日记
+        loadRelatedDiaries(spotId, 'spot-related-diaries');
+        
+        // 显示模态框
+        const modal = new bootstrap.Modal(document.getElementById('spot-detail-modal'));
+        modal.show();
+    }
+
+
+        function loadRelatedSpots(spotIds, containerId) {
+        // 这里应该是从后端API获取数据
+        // 模拟数据
+        const allSpots = [
+            { id: 1, name: '故宫' },
+            { id: 2, name: '长城' },
+            { id: 3, name: '颐和园' },
+            { id: 4, name: '天坛' }
+        ];
+        
+        const spots = allSpots.filter(spot => spotIds.includes(spot.id));
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        if (spots.length === 0) {
+            container.innerHTML = '<p>未关联景点</p>';
+            return;
+        }
+        
+        spots.forEach(spot => {
+            const spotElement = document.createElement('div');
+            spotElement.className = 'mb-2';
+            spotElement.innerHTML = `
+                <a href="#" class="text-decoration-none spot-link" data-id="${spot.id}">${spot.name}</a>
+            `;
+            container.appendChild(spotElement);
+            
+            // 添加点击事件
+            spotElement.querySelector('.spot-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSpotDetail(spot.id);
+            });
+        });
+    }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从URL参数获取用户ID
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('id');
+            
+            // 加载用户数据
+            loadUserProfile(userId);
+            
+            // 加载用户日记
+            loadUserDiaries(userId);
+            
+            // 初始化导航栏用户信息
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('username-display').textContent = currentUser.username;
+            }
+            
+            // 退出登录
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+        });
+        
+        // 加载用户资料
+        function loadUserProfile(userId) {
+            // 这里应该是从后端API获取数据
+            // 模拟数据
+            const users = [
+                { id: 1, username: 'current_user', name: '当前用户', bio: '这是我的个人主页', avatar: './images/御用头像.jpg' },
+                { id: 2, username: 'travel_lover', name: '李四', bio: '热爱旅行，喜欢分享', avatar: './images/御用头像.jpg' },
+                { id: 3, username: 'photo_master', name: '王五', bio: '摄影爱好者', avatar: './images/御用头像.jpg' },
+                { id: 4, username: 'food_explorer', name: '赵六', bio: '美食探索者', avatar: './images/御用头像.jpg' }
+            ];
+            
+            const user = users.find(u => u.id == userId) || users[0];
+            
+            document.getElementById('profile-username').textContent = user.name;
+            document.getElementById('profile-bio').textContent = user.bio;
+            document.getElementById('profile-avatar').src = user.avatar;
+            document.title = `${user.name}的主页 - 旅游助手`;
+        }
+        
+        // 加载用户日记
+        function loadUserDiaries(userId) {
+            // 这里应该是从后端API获取数据
+            // 模拟数据
+            const allDiaries = [
+                { id: 1, userId: 2, title: '故宫一日游', date: '2023-05-15', content: '今天去了故宫，人真的好多啊...', likes: 24 },
+                { id: 2, userId: 2, title: '长城徒步记', date: '2023-04-22', content: '爬长城真的很累，但是风景太美了...', likes: 18 },
+                { id: 3, userId: 3, title: '颐和园春游', date: '2023-03-10', content: '春天的颐和园真是太美了...', likes: 15 },
+                { id: 4, userId: 1, title: '我的长城之旅', date: '2023-06-10', content: '今天终于实现了爬长城的梦想...', likes: 8 },
+                { id: 5, userId: 1, title: '颐和园游记', date: '2023-05-28', content: '颐和园的昆明湖真是太美了...', likes: 5 }
+            ];
+            
+            const diaries = allDiaries.filter(diary => diary.userId == userId);
+            const container = document.getElementById('user-diaries');
+            container.innerHTML = '';
+            
+            if (diaries.length === 0) {
+                container.innerHTML = '<p>该用户还没有写过日记</p>';
+                return;
+            }
+            
+            diaries.forEach(diary => {
+                const diaryElement = document.createElement('div');
+                diaryElement.className = 'list-group-item';
+                diaryElement.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5>${diary.title}</h5>
+                            <small class="text-muted">日期: ${diary.date} | 点赞: ${diary.likes}</small>
+                            <p class="mt-2">${diary.content.substring(0, 100)}...</p>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm">查看详情</button>
+                    </div>
+                `;
+                container.appendChild(diaryElement);
+                
+                // 添加点击事件
+                diaryElement.querySelector('button').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showDiaryDetail(diary.id);
+                });
+            });
+        }
+    </script>
+    
+</body>
+</html>

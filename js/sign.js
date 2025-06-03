@@ -72,13 +72,48 @@
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            if (document.getElementById('agreeCheckbox').checked) {
-                alert(`登录成功！用户名: ${username}, 密码: ${password}`);
+            
+            if (!document.getElementById('agreeCheckbox').checked) {
+                alert("请先同意用户协议！");
+                return;
+            }
+
+            // 构造请求数据
+            const loginData = {
+                username: username,
+                password: password
+            };
+
+            // 发送登录请求
+            fetch('http://10.29.172.31:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('登录失败');
+                }
+            })
+            .then(data => {
+                console.log(data);
+                // 登录成功处理
+                const mockUser = {
+                    username: data.username || "街口施法老太",
+                    signature: data.signature || "为有牺牲多壮志，敢叫日月换新天",
+                    avatar: "./images/御用头像.jpg"
+                };
+                localStorage.setItem('currentUser', JSON.stringify(mockUser));
                 signmodal.style.display = 'none';
                 window.location.href = 'main.html';
-            } else {
-                alert("请先同意用户协议！");
-            }
+            })
+            .catch(error => {
+                alert(error.message);
+            });
         });
 
         // 处理注册表单提交
@@ -86,31 +121,84 @@
             event.preventDefault();
             const newUsername = document.getElementById('newUsername').value;
             const newPassword = document.getElementById('newPassword').value;
-            alert(`注册成功！用户名: ${newUsername}, 密码: ${newPassword}`);
-            showLoginPage(); // 返回登录界面
+
+            // 构造请求数据
+            const registerData = {
+                username: newUsername,
+                password: newPassword,
+            };
+
+            // 发送注册请求
+            fetch('http://10.29.172.31:5000/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(registerData)
+            })
+            .then(response => {
+                if (response.status === 201) {
+                    return response.json();
+                } else {
+                    return response.json().then(err => {
+                        throw new Error(err.error || '注册失败');
+                    });
+                }
+            })
+            .then(data => {
+                // 注册成功处理
+                alert(`注册成功！用户名: ${data.username}`);
+                showLoginPage(); // 返回登录界面
+            })
+            .catch(error => {
+                alert(error.message);
+            });
         });
 
         // 处理忘记密码表单提交
         document.getElementById('forgotPasswordForm').addEventListener('submit', (event) => {
             event.preventDefault();
+            const username = document.getElementById('Username').value; 
             const oldPassword = document.getElementById('oldPassword').value;
             const newPassword1 = document.getElementById('newPassword1').value;
             const newPassword2 = document.getElementById('newPassword2').value;
 
-            // 判断新密码是否与原密码相同
-            if (newPassword1 === oldPassword) {
-                alert("新密码不能与原密码相同！");
-                return;
-            }
-
-            // 判断两次输入的新密码是否一致
+            // 验证两次新密码是否一致（前端验证）
             if (newPassword1 !== newPassword2) {
                 alert("两次输入的新密码不一致，请重新输入！");
                 return;
             }
 
-            alert("密码重置成功！");
-            showLoginPage(); // 返回登录界面
+            // 构造请求数据
+            const passwordData = {
+                username: username,
+                old_password: oldPassword,
+                new_password: newPassword1
+            };
+
+            // 发送修改密码请求
+            fetch('http://10.29.172.31:5000/change_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(passwordData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.error || '密码修改失败');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.success || '密码修改成功！');
+                showLoginPage(); // 返回登录界面
+            })
+            .catch(error => {
+                alert(error.message);
+            });
         });
 
         // 点击用户协议链接显示协议详情页面
